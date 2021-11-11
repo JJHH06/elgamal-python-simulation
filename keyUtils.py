@@ -1,3 +1,10 @@
+#Laboratorio 10, librería de funciones de útilidad
+# Simulación de cifrado ElGamal
+# Jose Javier Hurtarte 19707
+# Andrei Francisco Portales 19825
+# Christian Pérez 19710
+
+
 from random import randrange
 #k: cantidad de primos a generar
 def fermatRandomPrime( k,min, max ,iteraciones = 25):
