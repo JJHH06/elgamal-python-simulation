@@ -1,4 +1,4 @@
-#Laboratorio 10
+#Laboratorio 10, programa principal
 # Simulación de cifrado ElGamal
 # Jose Javier Hurtarte 19707
 # Andrei Francisco Portales 19825
@@ -51,17 +51,19 @@ class Alice:
 
 # create class Bob
 class Bob:
-    def __init__(self, g):
+    def __init__(self, g, A):
         self.p = P
         self.g = g
+        self.A = A
         self.b = randrange(2,self.p-1)
         self.calculateSharedKey()
+        
 
     def calculateSharedKey(self):
         self.B = pow(self.g,self.b,self.p)
     
-    def encrypt(self,A, message):
-        C = pow(A,self.b,self.p)
+    def encrypt(self, message):
+        C = pow(self.A,self.b,self.p)
         raw_key = str(self.B)+str(C)#La llave en si antes de colocarla en el hash
         K = sha256(raw_key.encode()).digest()
         return AES_encrypt(message, K)
@@ -82,8 +84,7 @@ Cifrado ElGamal:
 4. Salir
 """
 alice = Alice()
-bob = Bob(alice.g)
-encrypted = None
+bob = Bob(alice.g, alice.A)
 
 def menu():
     
@@ -96,12 +97,12 @@ def menu():
         
         if opcion == '1':
             alice = Alice()
-            bob = Bob(alice.g)
-            encrypted = None
+            bob = Bob(alice.g, alice.A)
             input('\nClaves de Alice y Bob generadas, presione enter para continuar:\n')
             pass
         elif opcion == '2':
-            encrypted = bob.encrypt(alice.A, input('\nIngresa el texto que deseas cifrar: ')) #se pasa la otra Clave de Alice para encriptar
+            encrypted = bob.encrypt(input('\nIngresa el texto que deseas cifrar: ')) #se pasa el mensaje para encriptar
+            #las llaves de encripcion se pasaron en la inicialización de bob
             save('cypher_text.txt', encrypted.decode())
             print('\nEl mensaje cifrado es: ', encrypted.decode())
             print('\nTambien se guardo en un archivo llamado cypher_text.txt')
